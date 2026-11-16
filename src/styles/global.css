@@ -1,0 +1,272 @@
+/* ==========================================================================
+   DESIGN TOKENS: change the look of the whole site from here.
+
+   Colours use light-dark(<light theme>, <dark theme>), so each colour is
+   defined once for both themes. The theme follows the visitor's system
+   setting unless they pick one with the toggle in the header.
+   ========================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  /* Surfaces: ivory paper, with a parchment tint for the header, the
+     introduction, the "At a glance" card and the footer */
+  --paper: light-dark(#f9f7f2, #111519);
+  --paper-tint: light-dark(#f1ece1, #181e25);
+
+  /* Ink (every text colour reads at 4.5:1 or better on both surfaces) */
+  --ink: light-dark(#1e2329, #ece6da);
+  --ink-2: light-dark(#4a4e55, #c4bdb0);
+  --ink-3: light-dark(#65686e, #9b958a);
+  --rule: light-dark(#e2dccf, #262d35);
+  --rule-strong: light-dark(#cbc2b0, #3a424c);
+
+  /* Deep navy for his name and headings; antique gold for fine rules and
+     small labels. Navy also marks links and focus. */
+  --heading: light-dark(#1b365d, #efe7d6);
+  --accent: light-dark(#1f4e79, #9dbbe0);
+  --accent-wash: light-dark(#dfe6ef, #1d2a38);
+  --gold: light-dark(#b9995a, #8f7746);
+  --gold-ink: light-dark(#7f612a, #cdb07a);
+
+  /* Type */
+  --font-serif: 'Source Serif 4 Variable', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Space & layout */
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.5rem);
+  --section-space: clamp(3rem, 2rem + 3vw, 4.5rem);
+  --container: 66rem;
+  --header-h: 4rem;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 1.5rem);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-weight: inherit;
+  text-wrap: balance;
+}
+
+p,
+li,
+dd {
+  text-wrap: pretty;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+  transition:
+    color 0.15s ease,
+    text-decoration-color 0.15s ease;
+}
+
+a:hover {
+  color: var(--accent);
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--accent-wash);
+  color: var(--ink);
+}
+
+strong {
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Shared building blocks
+   ========================================================================== */
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--container));
+  margin-inline: auto;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* The section right after the parchment introduction: the band's edge
+   already divides them, so drop the usual rule and some of the space. */
+main > .hero + .section {
+  padding-top: clamp(2.25rem, 1.75rem + 2vw, 3.5rem);
+}
+
+main > .hero + .section .grid {
+  padding-top: 0;
+  border-top: 0;
+}
+
+/* Small uppercase label, in gold */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: var(--gold-ink);
+}
+
+/* A list with a short rule before each item */
+.dash-list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dash-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 0.96875rem;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+.dash-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 0.45rem;
+  height: 1px;
+  background: var(--gold);
+}
+
+/* Picked-out words in lists, such as "Gold Medal" */
+.dash-list strong {
+  font-weight: 600;
+  color: var(--gold-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ==========================================================================
+   Print: a clean black-on-white document with link targets spelled out.
+   ========================================================================== */
+
+@media print {
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    background: #fff;
+    font-size: 11pt;
+  }
+
+  .site-header,
+  .skip-link,
+  [data-print='hide'] {
+    display: none !important;
+  }
+
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 0.8em;
+    word-break: break-all;
+    color: var(--ink-3);
+  }
+}

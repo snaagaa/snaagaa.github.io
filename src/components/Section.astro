@@ -1,0 +1,68 @@
+---
+/**
+ * The frame every page section shares: the heading in a left-hand column on
+ * wide screens (above the content on narrow ones). Headings live in
+ * `sections` in profile.ts.
+ */
+import { sections } from '../data/profile';
+import type { SectionMeta } from '../data/types';
+
+interface Props {
+  id: (typeof sections)[number]['id'];
+}
+
+const { id } = Astro.props;
+const meta: SectionMeta | undefined = sections.find((s) => s.id === id);
+if (!meta) throw new Error(`No section "${id}" in sections (src/data/profile.ts).`);
+---
+
+<section id={meta.id} class="section" aria-labelledby={`${meta.id}-title`}>
+  <div class="container grid">
+    <header class="head">
+      <h2 id={`${meta.id}-title`} class="title">{meta.title}</h2>
+      {meta.note && <p class="note">{meta.note}</p>}
+    </header>
+    <div class="body">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-top: var(--section-space);
+  }
+
+  .grid {
+    display: grid;
+    gap: 1.5rem 3rem;
+    padding-top: clamp(1.75rem, 1.25rem + 1.5vw, 2.5rem);
+    border-top: 1px solid var(--rule);
+  }
+
+  .title {
+    font-family: var(--font-serif);
+    font-size: clamp(1.5rem, 1.35rem + 0.6vw, 1.875rem);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--heading);
+  }
+
+  .note {
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--ink-3);
+  }
+
+  @media (min-width: 60rem) {
+    .grid {
+      grid-template-columns: 13rem minmax(0, 1fr);
+    }
+
+    .title {
+      font-size: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,183 @@
+---
+import Icon from './Icon.astro';
+import { person, sections } from '../data/profile';
+---
+
+<header class="site-header" data-header>
+  <div class="container inner">
+    <a class="wordmark" href="#top">{person.shortName}</a>
+
+    <nav id="site-nav" class="nav" aria-label="Sections">
+      <ul role="list">
+        {
+          sections.map((s) => (
+            <li>
+              <a href={`#${s.id}`}>{s.title}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="actions">
+      <button class="icon-button menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-toggle>
+        <span class="visually-hidden">Sections</span>
+        <Icon name="menu" size={20} />
+      </button>
+      <button class="icon-button" type="button" aria-pressed="false" data-theme-toggle>
+        <span class="visually-hidden">Dark theme</span>
+        <Icon name="contrast" size={19} />
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  /* Same parchment as the introduction below it, so the two read as one band. */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: var(--paper-tint);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+
+  .site-header:global(.is-scrolled) {
+    border-bottom-color: var(--rule);
+  }
+
+  .inner {
+    position: relative;
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .wordmark {
+    flex: none;
+    white-space: nowrap;
+    font-family: var(--font-serif);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--heading);
+    text-decoration: none;
+  }
+
+  .wordmark:hover {
+    color: var(--heading);
+  }
+
+  .nav {
+    margin-left: auto;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav a {
+    display: block;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  .nav a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.25rem;
+    /* Optically line the icons up with the right edge of the page. */
+    margin-right: -0.6rem;
+  }
+
+  .icon-button {
+    display: inline-grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--ink-2);
+    cursor: pointer;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease;
+  }
+
+  .icon-button:hover {
+    color: var(--ink);
+    background: color-mix(in oklab, var(--ink) 6%, transparent);
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  @media (max-width: 60rem) {
+    .actions {
+      margin-left: auto;
+    }
+
+    .menu-toggle {
+      display: inline-grid;
+    }
+
+    .nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      padding: 0.25rem 0 0.75rem;
+      border-bottom: 1px solid var(--rule);
+      background: var(--paper-tint);
+      visibility: hidden;
+    }
+
+    .nav:global(.is-open) {
+      visibility: visible;
+    }
+
+    .nav ul {
+      flex-direction: column;
+    }
+
+    .nav a {
+      padding: 0.7rem 0;
+      font-size: 1rem;
+    }
+
+    /* Without JavaScript the menu can't open, so show the links instead. */
+    :global(html:not(.js)) .menu-toggle {
+      display: none;
+    }
+
+    :global(html:not(.js)) .nav {
+      min-width: 0;
+      position: static;
+      visibility: visible;
+      border: 0;
+      padding: 0;
+      background: none;
+      overflow-x: auto;
+    }
+
+    :global(html:not(.js)) .nav ul {
+      flex-direction: row;
+      gap: 1rem;
+    }
+  }
+</style>

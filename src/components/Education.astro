@@ -1,0 +1,79 @@
+---
+import Section from './Section.astro';
+import { education } from '../data/profile';
+import { yearSpan } from '../lib/format';
+import { md } from '../lib/md';
+---
+
+<Section id="education">
+  <div class="entries">
+    {
+      education.map((e) => (
+        <article class="entry" id={e.id} aria-labelledby={`${e.id}-name`}>
+          <header class="entry-head">
+            <h3 class="institution" id={`${e.id}-name`}>
+              {e.institution}
+            </h3>
+            <p class="years">{yearSpan(e.start, e.end)}</p>
+          </header>
+          <p class="qualification">{e.qualification}</p>
+          <ul class="dash-list honours" role="list">
+            {e.honours.map((h) => (
+              <li set:html={md(h)} />
+            ))}
+          </ul>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .entry {
+    padding-block: 1.75rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .entry:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .entry:last-child {
+    padding-bottom: 0;
+  }
+
+  .entry-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+  }
+
+  .institution {
+    font-family: var(--font-serif);
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    color: var(--heading);
+  }
+
+  .years {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .qualification {
+    margin-top: 0.2rem;
+    color: var(--ink-2);
+  }
+
+  .honours {
+    margin-top: 0.85rem;
+  }
+</style>

@@ -1,0 +1,221 @@
+---
+import Section from './Section.astro';
+import { career } from '../data/profile';
+import { formatRange, yearSpan } from '../lib/format';
+import { md } from '../lib/md';
+---
+
+<Section id="experience">
+  <div class="entries">
+    {
+      career.map((c) => (
+        <article class="entry" id={c.id} aria-labelledby={`${c.id}-name`}>
+          <header class="entry-head">
+            <h3 class="org" id={`${c.id}-name`}>
+              {c.organisation}
+            </h3>
+            <p class="years">{yearSpan(c.start, c.end)}</p>
+          </header>
+          {(c.sector || c.location) && <p class="meta">{[c.sector, c.location].filter(Boolean).join(' · ')}</p>}
+
+          {c.intro && <p class="intro" set:html={md(c.intro)} />}
+
+          {c.stats && (
+            <ul class="stats" role="list">
+              {c.stats.map((s) => (
+                <li class="stat">
+                  <span class="stat-value">{s.value}</span>
+                  <span class="stat-label" set:html={md(s.label)} />
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {c.roles.length > 0 && (
+            <ol class="roles" role="list">
+              {c.roles.map((r) => (
+                <li class="role">
+                  <div class="role-head">
+                    <h4 class="role-title">{r.title}</h4>
+                    {r.start && <span class="role-dates">{formatRange(r.start, r.end)}</span>}
+                  </div>
+                  {r.points && (
+                    <ul class="dash-list points" role="list">
+                      {r.points.map((p) => (
+                        <li set:html={md(p)} />
+                      ))}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ol>
+          )}
+
+          {c.boards && (
+            <div class="boards">
+              <h4 class="eyebrow">Board experience</h4>
+              <ul class="dash-list" role="list">
+                {c.boards.map((b) => (
+                  <li set:html={md(b)} />
+                ))}
+              </ul>
+            </div>
+          )}
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .entry {
+    padding-block: 2rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .entry:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .entry:last-child {
+    padding-bottom: 0;
+  }
+
+  .entry-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+  }
+
+  .org {
+    font-family: var(--font-serif);
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.25;
+    letter-spacing: -0.005em;
+    color: var(--heading);
+  }
+
+  .years {
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  .meta {
+    margin-top: 0.2rem;
+    font-size: 0.875rem;
+    color: var(--ink-3);
+  }
+
+  .intro {
+    max-width: 46rem;
+    margin-top: 0.85rem;
+    line-height: 1.6;
+  }
+
+  /* Key figures: a row between fine gold rules, like the one under his name. */
+  .stats {
+    display: grid;
+    max-width: 46rem;
+    margin: 1.1rem 0 0;
+    padding: 0;
+    list-style: none;
+    border-block: 1px solid var(--gold);
+  }
+
+  .stat {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: 0.7rem;
+  }
+
+  .stat + .stat {
+    border-top: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+  }
+
+  .stat-value {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.1;
+    font-variant-numeric: lining-nums;
+    color: var(--heading);
+  }
+
+  .stat-label {
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+
+  @media (min-width: 40rem) {
+    .stats {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stat {
+      align-content: start;
+      padding: 0.85rem 1.25rem;
+    }
+
+    .stat:first-child {
+      padding-left: 0;
+    }
+
+    .stat + .stat {
+      border-top: 0;
+      border-left: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+    }
+  }
+
+  .roles {
+    display: grid;
+    gap: 1rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .role-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.1rem 1.25rem;
+  }
+
+  .role-title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .role-dates {
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-3);
+    white-space: nowrap;
+  }
+
+  .points {
+    margin-top: 0.4rem;
+  }
+
+  .dash-list {
+    max-width: 46rem;
+  }
+
+  .boards {
+    margin-top: 1.25rem;
+  }
+
+  .boards .dash-list {
+    margin-top: 0.6rem;
+  }
+</style>

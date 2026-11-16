@@ -1,0 +1,143 @@
+---
+import Section from './Section.astro';
+import { about } from '../data/profile';
+import { md } from '../lib/md';
+---
+
+<Section id="about">
+  <div class="layout">
+    <div class="summary">
+      {about.summary.map((p) => <p set:html={md(p)} />)}
+    </div>
+
+    <aside class="facts" aria-labelledby="facts-title">
+      <h3 id="facts-title" class="eyebrow">At a glance</h3>
+      <dl>
+        {
+          about.facts.map((fact) => (
+            <div class="row">
+              <dt>{fact.label}</dt>
+              <dd>
+                {Array.isArray(fact.value) && fact.value.length > 1 ? (
+                  <ul class="values" role="list">
+                    {fact.value.map((line) => (
+                      <li set:html={md(line)} />
+                    ))}
+                  </ul>
+                ) : (
+                  <span set:html={md(Array.isArray(fact.value) ? fact.value[0] : fact.value)} />
+                )}
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </aside>
+  </div>
+</Section>
+
+<style>
+  .layout {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 72rem) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      gap: 3rem;
+      align-items: start;
+    }
+  }
+
+  /* A parchment card with a gold edge, so the summary stands apart. */
+  .facts {
+    padding: 1.25rem 1.25rem 1.375rem;
+    background: var(--paper-tint);
+    border-top: 2px solid var(--gold);
+  }
+
+  .summary {
+    max-width: 40rem;
+    font-family: var(--font-serif);
+    font-size: 1.1875rem;
+    line-height: 1.65;
+  }
+
+  .summary p + p {
+    margin-top: 1em;
+  }
+
+  .facts dl {
+    margin-top: 1rem;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 0.75rem;
+    border-top: 1px solid color-mix(in oklab, var(--gold) 40%, transparent);
+  }
+
+  .row:last-child {
+    padding-bottom: 0;
+  }
+
+  /* Beside the summary, the list reads as one block: stack label above value. */
+  @media (min-width: 72rem) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+
+  dt {
+    padding-top: 0.15rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    line-height: 1.45;
+    text-transform: uppercase;
+    color: var(--gold-ink);
+  }
+
+  dd {
+    font-size: 0.9375rem;
+    line-height: 1.4;
+  }
+
+  /* Entries can run to two or three lines, so each starts with a small gold
+     diamond and wrapped lines hang clear of it. */
+  .values {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .values li {
+    position: relative;
+    padding-left: 0.95rem;
+  }
+
+  .values li::before {
+    content: '';
+    position: absolute;
+    left: 0.1rem;
+    /* Centred on the first line of text. */
+    top: calc(0.7em - 2.5px);
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  @media (max-width: 26rem) {
+    .row {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>

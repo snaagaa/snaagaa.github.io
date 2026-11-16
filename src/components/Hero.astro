@@ -1,0 +1,258 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+// His photo. To change it, replace this file with any portrait-shaped photo.
+import portrait from '../assets/portrait.jpg';
+import { contact, person } from '../data/profile';
+import { md } from '../lib/md';
+
+if (!contact.email && !contact.linkedin) {
+  console.warn('\n[contact] No email or LinkedIn address in src/data/profile.ts yet, so the page has no contact links.\n');
+}
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="container layout">
+    <div class="intro">
+      <h1 class="name" id="hero-title">{person.name}</h1>
+
+      <ul class="highlights" role="list">
+        {
+          person.highlights.map((h) => (
+            <li class="highlight">
+              <span class="highlight-title">{h.title}</span>
+              <span class="highlight-detail" set:html={md(h.detail)} />
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="lede" set:html={md(person.lede)} />
+
+      {
+        (contact.linkedin || contact.email) && (
+          <ul class="links" role="list">
+            {contact.linkedin && (
+              <li>
+                <a href={contact.linkedin} target="_blank" rel="noopener noreferrer">
+                  <Icon name="linkedin" size={16} />
+                  LinkedIn
+                </a>
+              </li>
+            )}
+            {contact.email && (
+              <li>
+                <a href={`mailto:${contact.email}`}>
+                  <Icon name="mail" size={16} />
+                  {contact.email}
+                </a>
+              </li>
+            )}
+          </ul>
+        )
+      }
+    </div>
+
+    <div class="photo">
+      <Picture
+        src={portrait}
+        alt={person.name}
+        formats={['avif', 'webp']}
+        widths={[144, 224, 288, portrait.width]}
+        sizes="(min-width: 48rem) 14rem, 9rem"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  /* A parchment band that runs on from the header. */
+  .hero {
+    padding-block: clamp(2.5rem, 1.5rem + 3.5vw, 4.5rem) clamp(2.5rem, 1.5rem + 3vw, 4rem);
+    background: var(--paper-tint);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  /* Phones: the photo sits above the name. Wider screens: to the right. */
+  .layout {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .photo {
+    order: -1;
+  }
+
+  .photo :global(img) {
+    width: 9rem;
+    height: auto;
+    border-radius: 3px;
+    background: var(--rule);
+    box-shadow: 0 0 0 1px var(--rule-strong);
+  }
+
+  @media (min-width: 48rem) {
+    .layout {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 3rem;
+    }
+
+    .photo {
+      order: 0;
+    }
+
+    .photo :global(img) {
+      width: clamp(11rem, 4rem + 11vw, 14rem);
+    }
+  }
+
+  .name {
+    font-family: var(--font-serif);
+    font-size: clamp(2.375rem, 1.8rem + 2.6vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--heading);
+  }
+
+  /* Credentials: a row between fine gold rules, stacked on phones. */
+  .highlights {
+    display: grid;
+    margin: clamp(1.25rem, 1rem + 1vw, 1.75rem) 0 0;
+    padding: 0;
+    list-style: none;
+    border-block: 1px solid var(--gold);
+  }
+
+  .highlight {
+    display: grid;
+    gap: 0.2rem;
+    padding-block: 0.7rem;
+  }
+
+  .highlight + .highlight {
+    border-top: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+  }
+
+  .highlight-title {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--heading);
+  }
+
+  .highlight-detail {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+
+  .highlight-detail :global(strong) {
+    font-weight: 600;
+    color: var(--gold-ink);
+  }
+
+  @media (min-width: 40rem) {
+    .highlights {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .highlight {
+      align-content: start;
+      gap: 0.3rem;
+      padding: 0.9rem 1.25rem;
+    }
+
+    .highlight:first-child {
+      padding-left: 0;
+    }
+
+    .highlight + .highlight {
+      border-top: 0;
+      border-left: 1px solid color-mix(in oklab, var(--gold) 45%, transparent);
+    }
+
+    .highlight-title {
+      font-size: clamp(1.25rem, 1.1rem + 0.45vw, 1.5rem);
+    }
+  }
+
+  .lede {
+    margin-top: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+    max-width: 40rem;
+    font-family: var(--font-serif);
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+    line-height: 1.55;
+    color: var(--ink-2);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .links a:hover {
+    text-decoration: underline;
+  }
+
+  .links :global(.icon) {
+    color: var(--gold-ink);
+  }
+
+  /* On paper: no band, and the photo beside the text, smaller. */
+  @media print {
+    .hero {
+      background: none;
+      padding-block: 0 1.5rem;
+    }
+
+    .layout {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .photo {
+      order: 0;
+    }
+
+    .photo :global(img) {
+      width: 8rem;
+    }
+
+    .highlights {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .highlight {
+      gap: 0.2rem;
+      padding: 0.6rem 1rem;
+    }
+
+    .highlight:first-child {
+      padding-left: 0;
+    }
+
+    .highlight + .highlight {
+      border-top: 0;
+      border-left: 1px solid var(--gold);
+    }
+  }
+</style>

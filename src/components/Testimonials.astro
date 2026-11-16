@@ -1,0 +1,76 @@
+---
+import Section from './Section.astro';
+import { testimonials } from '../data/profile';
+import { formatDate } from '../lib/format';
+---
+
+<Section id="testimonials">
+  <div class="quotes">
+    {
+      testimonials.map((t) => (
+        <figure class="quote">
+          <blockquote>
+            <p>{t.text}</p>
+          </blockquote>
+          <figcaption>
+            <span class="who">{t.author}</span>
+            <span class="role">{t.title}</span>
+            <span class="how">
+              {t.relationship} · <time datetime={t.date}>{formatDate(t.date)}</time>
+            </span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .quotes {
+    columns: 2 20rem;
+    column-gap: 3rem;
+  }
+
+  .quote {
+    break-inside: avoid;
+    margin: 0;
+    padding-block: 0 2rem;
+  }
+
+  .quote blockquote {
+    margin: 0;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--gold);
+  }
+
+  .quote p {
+    font-family: var(--font-serif);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .quote figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    margin-top: 0.9rem;
+    /* Line up with the quote text, past its 2px rule. */
+    padding-left: calc(1.25rem + 2px);
+    line-height: 1.4;
+  }
+
+  .who {
+    font-weight: 600;
+    color: var(--heading);
+  }
+
+  .role {
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+
+  .how {
+    font-size: 0.8125rem;
+    color: var(--ink-3);
+  }
+</style>
