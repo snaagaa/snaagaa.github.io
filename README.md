@@ -1,6 +1,6 @@
-# Swaminathan Nagarajan: personal website
+# Nagarajan S: personal website
 
-A single-page site for Swaminathan (Naga) Nagarajan. It is built with
+A single-page site for Nagarajan S (Naga). It is built with
 [Astro](https://astro.build), and every word on the page lives in one file, so updating it
 never means touching layout code.
 

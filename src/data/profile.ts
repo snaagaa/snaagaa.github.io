@@ -24,9 +24,9 @@ export const contact: Contact = {
 /* Site ------------------------------------------------------------------ */
 
 export const site = {
-  title: 'Swaminathan Nagarajan · MD & CEO',
+  title: 'Nagarajan S · MD & CEO',
   description:
-    'Swaminathan (Naga) Nagarajan: more than three decades in the Tata Group, twice as managing director and CEO, with board experience in India, Kenya, Indonesia and the US. IIT Madras, and IIM Ahmedabad gold medallist.',
+    'Nagarajan S (Naga): more than three decades in the Tata Group, twice as managing director and CEO, with board experience in India, Kenya, Indonesia and the US. IIT Madras, and IIM Ahmedabad gold medallist.',
   lang: 'en-GB',
   /** true asks search engines not to list the site. */
   noindex: false,
@@ -43,10 +43,10 @@ export const sections = [
 /* Hero ------------------------------------------------------------------ */
 
 export const person = {
-  name: 'Swaminathan Nagarajan',
-  shortName: 'S Nagarajan',
+  name: 'Nagarajan S',
+  shortName: 'Nagarajan S',
   /** Other forms of his name, so searches for any of them find the site. */
-  alternateNames: ['S Nagarajan', 'Nagarajan S'],
+  alternateNames: ['S Nagarajan'],
   /** Used in the footer and the browser tab. */
   headline: 'MD & CEO',
   /** The row of credentials under his name. **Bold** text is picked out in gold. */

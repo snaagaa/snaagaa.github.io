@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "The personal website of Swaminathan (Naga) Nagarajan.",
+  "description": "The personal website of Nagarajan S (Naga).",
   "engines": {
     "node": ">=22.23.4"
   },
